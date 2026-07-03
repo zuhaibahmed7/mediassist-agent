@@ -1,4 +1,4 @@
-[README (4).md](https://github.com/user-attachments/files/29637186/README.4.md)
+[README.md](https://github.com/user-attachments/files/29637186/README.4.md)
 # 🩺 MediAssist — AI Health Information Agent
 
 MediAssist is a conversational AI agent that helps users understand symptoms, get medication information, and receive personalized health guidance.
