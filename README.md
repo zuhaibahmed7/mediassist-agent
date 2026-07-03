@@ -5,7 +5,7 @@ MediAssist is a conversational AI agent that helps users understand symptoms, ge
 
 Built for the **Qwen Cloud Hackathon 2026** — MemoryAgent Track.
 
-## 🌟 Features
+## Features
 
 - 💬 **Conversational Health Assistant** — Ask health questions in natural language
 - 🧠 **Persistent Memory** — Remembers you across sessions (MemoryAgent track)
@@ -13,7 +13,7 @@ Built for the **Qwen Cloud Hackathon 2026** — MemoryAgent Track.
 - 👤 **User Profiles** — Personalized experience stored in MongoDB
 - ⚠️ **Responsible AI** — Always recommends professional medical help when needed
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 User (Streamlit Web UI)
@@ -33,7 +33,7 @@ User (Streamlit Web UI)
 - **Cloud:** Alibaba Cloud ECS (Singapore)
 - **Language:** Python 3.9
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 mediassist-agent/
@@ -44,7 +44,7 @@ mediassist-agent/
 └── README.md           # This file
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.9+
@@ -85,14 +85,14 @@ streamlit run app.py
 
 6. Open browser at `http://localhost:8501`
 
-## 🌐 Live Demo
+## Live Demo
 
 Access the live deployed version at:
 ```
 http://47.84.195.213:8501
 ```
 
-## 🧠 MemoryAgent Track Features
+## MemoryAgent Track Features
 
 This project specifically addresses the MemoryAgent track requirements:
 
@@ -103,7 +103,7 @@ This project specifically addresses the MemoryAgent track requirements:
 - ✅ **Timely memory management** — last 20 messages loaded per session
 - ✅ **Chat history sidebar** — browse and reload past conversations
 
-## 🗄️ Database Design
+## Database Design
 
 ### Collections in MongoDB Atlas (`mediassist_db`):
 
@@ -113,7 +113,7 @@ This project specifically addresses the MemoryAgent track requirements:
 | `symptom_logs` | Tracks all symptom checks |
 | `chat_history` | Full conversation logs per session |
 
-## ☁️ Alibaba Cloud Deployment
+## Alibaba Cloud Deployment
 
 The backend is deployed on **Alibaba Cloud ECS** (Singapore region):
 - Instance: Burstable Type t6, 2 vCPU, 4 GiB RAM
@@ -121,10 +121,10 @@ The backend is deployed on **Alibaba Cloud ECS** (Singapore region):
 - Port: 8501 (Streamlit)
 - Running via: Python virtual environment
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 MediAssist provides general health information only. It is **not a substitute** for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
