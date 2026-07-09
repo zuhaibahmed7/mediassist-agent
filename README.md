@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/29637186/README.4.md)
-# 🩺 MediAssist — AI Health Information Agent
+# MediAssist — AI Health Information Agent
 
 MediAssist is a conversational AI agent that helps users understand symptoms, get medication information, and receive personalized health guidance.
 
@@ -7,11 +7,11 @@ Built for the **Qwen Cloud Hackathon 2026** — MemoryAgent Track.
 
 ## Features
 
-- 💬 **Conversational Health Assistant** — Ask health questions in natural language
-- 🧠 **Persistent Memory** — Remembers you across sessions (MemoryAgent track)
-- 📋 **Chat History** — View and revisit past conversations (like ChatGPT)
-- 👤 **User Profiles** — Personalized experience stored in MongoDB
-- ⚠️ **Responsible AI** — Always recommends professional medical help when needed
+-  **Conversational Health Assistant** — Ask health questions in natural language
+-  **Persistent Memory** — Remembers you across sessions (MemoryAgent track)
+-  **Chat History** — View and revisit past conversations (like ChatGPT)
+-  **User Profiles** — Personalized experience stored in MongoDB
+-  **Responsible AI** — Always recommends professional medical help when needed
 
 ## Architecture
 
