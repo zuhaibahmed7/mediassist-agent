@@ -25,7 +25,7 @@ User (Streamlit Web UI)
    Deployed on Alibaba Cloud ECS (Singapore)
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend:** Streamlit
 - **AI Model:** Qwen (qwen-plus) via Qwen Cloud
