@@ -1,9 +1,11 @@
 import streamlit as st
+import sys
+sys.setrecursionlimit(10000)
 import uuid
 from agent import chat_with_agent
 from mongodb_tools import (
     get_user_by_email, create_user, get_recent_chat_history,
-    get_all_sessions, get_session_messages
+    get_all_sessions, get_session_messages, verify_user
 )
 
 st.set_page_config(page_title="MediAssist", page_icon="🩺", layout="centered")
@@ -22,31 +24,64 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "memory_context" not in st.session_state:
-    st.session_state.memory_context = []  # Persistent memory, survives "New Conversation"
+    st.session_state.memory_context = []
 
-# --- Simple Login (Email-based) ---
+# --- Login / Signup ---
 if st.session_state.user_id is None:
-    st.subheader("👋 Welcome! Enter your email to get started")
-    email = st.text_input("Email")
-    name = st.text_input("Name")
+    st.subheader("👋 Welcome to MediAssist")
 
-    if st.button("Continue"):
-        if email and name:
-            user = get_user_by_email(email)
-            if user:
-                st.session_state.user_id = str(user["_id"])
+    tab1, tab2 = st.tabs(["Login", "Sign Up"])
+
+    # --- Login Tab ---
+    with tab1:
+        login_email = st.text_input("Email", key="login_email")
+        login_password = st.text_input("Password", type="password", key="login_password")
+
+        if st.button("Login"):
+            if login_email and login_password:
+                user = verify_user(login_email, login_password)
+                if user:
+                    st.session_state.user_id = str(user["_id"])
+                    history = get_recent_chat_history(st.session_state.user_id)
+                    st.session_state.messages = history
+                    st.session_state.memory_context = history
+                    st.rerun()
+                else:
+                    st.error("❌ Incorrect email or password.")
             else:
-                new_id = create_user(name=name, age=0, gender="", email=email)
-                st.session_state.user_id = new_id
+                st.warning("Please enter both email and password.")
 
-            # Load past history once — used for both display AND long-term memory
-            history = get_recent_chat_history(st.session_state.user_id)
-            st.session_state.messages = history
-            st.session_state.memory_context = history
+    # --- Sign Up Tab ---
+    with tab2:
+        signup_name = st.text_input("Full Name", key="signup_name")
+        signup_email = st.text_input("Email", key="signup_email")
+        signup_password = st.text_input("Password", type="password", key="signup_password")
+        signup_confirm = st.text_input("Confirm Password", type="password", key="signup_confirm")
 
-            st.rerun()
-        else:
-            st.warning("Please enter both name and email.")
+        if st.button("Create Account"):
+            if signup_name and signup_email and signup_password and signup_confirm:
+                if signup_password != signup_confirm:
+                    st.error("❌ Passwords do not match.")
+                elif len(signup_password) < 6:
+                    st.error("❌ Password must be at least 6 characters.")
+                else:
+                    existing = get_user_by_email(signup_email)
+                    if existing:
+                        st.error("❌ An account with this email already exists. Please login.")
+                    else:
+                        new_id = create_user(
+                            name=signup_name,
+                            age=0,
+                            gender="",
+                            email=signup_email,
+                            password=signup_password
+                        )
+                        st.session_state.user_id = new_id
+                        st.session_state.messages = []
+                        st.session_state.memory_context = []
+                        st.rerun()
+            else:
+                st.warning("Please fill in all fields.")
 
 # --- Chat Interface ---
 else:
@@ -55,12 +90,10 @@ else:
     if len(st.session_state.messages) > 0:
         st.info("👋 Welcome back! I remember our previous conversation.")
 
-    # Display chat history
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Chat input
     user_input = st.chat_input("Describe your symptoms or ask a health question...")
 
     if user_input:
@@ -70,9 +103,7 @@ else:
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                # Combine long-term memory + current visible messages for context
                 full_context = st.session_state.memory_context + st.session_state.messages
-
                 reply = chat_with_agent(
                     user_id=st.session_state.user_id,
                     session_id=st.session_state.session_id,
@@ -82,7 +113,6 @@ else:
                 st.markdown(reply)
 
         st.session_state.messages.append({"role": "assistant", "content": reply})
-        # Update memory context too, so it carries forward
         st.session_state.memory_context.append({"role": "user", "content": user_input})
         st.session_state.memory_context.append({"role": "assistant", "content": reply})
 
@@ -96,7 +126,6 @@ else:
         if st.button("➕ New Conversation"):
             st.session_state.messages = []
             st.session_state.session_id = str(uuid.uuid4())
-            # memory_context is NOT cleared — agent still remembers you!
             st.rerun()
 
         st.divider()
